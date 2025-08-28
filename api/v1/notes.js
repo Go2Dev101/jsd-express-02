@@ -1,4 +1,10 @@
 import express from "express";
+import {
+  createNote,
+  deleteNote,
+  editNote,
+  getNotes,
+} from "./controllers/notesController.js";
 
 const router = express.Router();
 
@@ -14,84 +20,88 @@ router.get("/", (req, res, next) => {
   }
 });
 
-let notes = [];
+// let notes = [];
 
-router.post("/notes", (req, res, next) => {
-  try {
-    const { title, content, tags = [] } = req.body;
+router.post("/notes", createNote);
+// router.post("/notes", (req, res, next) => {
+//   try {
+//     const { title, content, tags = [] } = req.body;
 
-    if (!title || !content) {
-      const error = new Error("Title and content are required.");
-      error.status = 400;
-      return next(error);
-    }
+//     if (!title || !content) {
+//       const error = new Error("Title and content are required.");
+//       error.status = 400;
+//       return next(error);
+//     }
 
-    const newNote = {
-      id: String(notes.length + 1),
-      title: title,
-      content: content,
-      tags: tags,
-    };
+//     const newNote = {
+//       id: String(notes.length + 1),
+//       title: title,
+//       content: content,
+//       tags: tags,
+//     };
 
-    notes.push(newNote);
+//     notes.push(newNote);
 
-    res.status(201).json(newNote);
-  } catch (err) {
-    next(err);
-  }
-});
+//     res.status(201).json(newNote);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
-// Route to handle GET requests to read posts
-router.get("/notes", (req, res, next) => {
-  try {
-    res.status(200).json(notes);
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/notes", getNotes);
+// router.get("/notes", (req, res, next) => {
+//   try {
+//     res.status(200).json(notes);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
-router.delete("/notes/:id", (req, res, next) => {
-  try {
-    const noteId = req.params.id;
+router.delete("/notes/:id", deleteNote);
+// router.delete("/notes/:id", (req, res, next) => {
+//   try {
+//     const noteId = req.params.id;
 
-    const noteIndex = notes.findIndex((note) => note.id === noteId);
+//     const noteIndex = notes.findIndex((note) => note.id === noteId);
 
-    if (noteIndex !== -1) {
-      notes.splice(noteIndex, 1);
+//     if (noteIndex !== -1) {
+//       notes.splice(noteIndex, 1);
 
-      res.status(200).send(`Note with ID ${noteId} deleted successfully.`);
-    } else {
-      const error = new Error("Note not found.");
-      error.status = 404;
-      return next(error);
-    }
-  } catch (err) {
-    next(err);
-  }
-});
+//       res.status(200).send(`Note with ID ${noteId} deleted successfully.`);
+//     } else {
+//       const error = new Error("Note not found.");
+//       error.status = 404;
+//       return next(error);
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 // Route to handle PUT requests to update a note
-router.put("/notes/:id", (req, res, next) => {
-  try {
-    const noteId = req.params.id;
-    const { title, content, tags } = req.body;
 
-    const note = notes.find((n) => n.id === noteId);
+router.put("/notes/:id", editNote);
+// router.put("/notes/:id", (req, res, next) => {
+//   try {
+//     const noteId = req.params.id;
+//     const { title, content, tags } = req.body;
 
-    if (note) {
-      if (title !== undefined) note.title = title;
-      if (content !== undefined) note.content = content;
-      if (tags !== undefined) note.tags = tags;
+//     const note = notes.find((n) => n.id === noteId);
 
-      res.status(200).json(note);
-    } else {
-      const error = new Error("Note not found.");
-      error.status = 404;
-      return next(error);
-    }
-  } catch (err) {
-    next(err);
-  }
-});
+//     if (note) {
+//       if (title !== undefined) note.title = title;
+//       if (content !== undefined) note.content = content;
+//       if (tags !== undefined) note.tags = tags;
+
+//       res.status(200).json(note);
+//     } else {
+//       const error = new Error("Note not found.");
+//       error.status = 404;
+//       return next(error);
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 export default router;

@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import apiRoutes from "./api/v1/notes.js";
+import { connectMongo } from "./config/mongo.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -36,6 +40,14 @@ app.use((err, req, res, next) => {
 
 const PORT = 3001;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} ✅ 🙌`);
-});
+(async () => {
+  try {
+    await connectMongo();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT} ✅ 🙌`);
+    });
+  } catch (err) {
+    console.error("❌ Startup error:", err);
+    process.exit(1);
+  }
+})();
