@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import apiRoutes from "./api/v1/notes.js";
+import usersRoutes from "./api/v1/users.js";
+import notesRoutes from "./api/v1/notes.js";
 import { connectMongo } from "./config/mongo.js";
 
 dotenv.config();
@@ -21,7 +22,8 @@ app.use(cors(corsOptions));
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-app.use("/", apiRoutes);
+app.use("/", usersRoutes);
+app.use("/", notesRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not Found...");
