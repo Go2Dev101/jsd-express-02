@@ -25,7 +25,7 @@ router.get("/", (req, res, next) => {
 
 router.post("/notes", authUser, createNote);
 
-router.get("/notes", getNotes);
+router.get("/notes", authUser, getNotes);
 
 router.delete("/notes/:id", deleteNote);
 

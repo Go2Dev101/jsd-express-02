@@ -26,13 +26,21 @@ export const createNote = async (req, res, next) => {
 
 // getNotes
 export const getNotes = async (req, res, next) => {
+  if (!req.user || !req.user._id) {
+    const error = new Error("Unauthorized: No user found in request object!");
+    error.status = 401;
+    return next(error);
+  }
+
   try {
-    const notes = await Note.find().sort({ createdAt: -1 });
+    const notes = await Note.find({ userId: req.user._id }).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       error: false,
       notes,
-      message: "All notes retrieved sucessfully!",
+      message: "All user's notes retrieved sucessfully!",
     });
   } catch (err) {
     next(err);
