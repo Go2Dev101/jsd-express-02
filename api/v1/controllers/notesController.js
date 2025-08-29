@@ -4,14 +4,16 @@ import { Note } from "../../../models/Note.js";
 export const createNote = async (req, res, next) => {
   const { title, content, tags = [] } = req.body;
 
-  if (!title || !content) {
-    const error = new Error("Title, and content are required!");
+  const userId = req.user._id;
+
+  if (!title || !content || !userId) {
+    const error = new Error("Title, content, and userId are required!");
     error.status = 400;
     return next(error);
   }
 
   try {
-    const note = await Note.create({ title, content, tags });
+    const note = await Note.create({ userId, title, content, tags });
     res.status(201).json({
       error: false,
       note,

@@ -5,6 +5,7 @@ import {
   editNote,
   getNotes,
 } from "./controllers/notesController.js";
+import { authUser } from "../../middleware/authUser.js";
 
 const router = express.Router();
 
@@ -20,88 +21,14 @@ router.get("/", (req, res, next) => {
   }
 });
 
-// let notes = [];
+// CRUD notes routes
 
-router.post("/notes", createNote);
-// router.post("/notes", (req, res, next) => {
-//   try {
-//     const { title, content, tags = [] } = req.body;
-
-//     if (!title || !content) {
-//       const error = new Error("Title and content are required.");
-//       error.status = 400;
-//       return next(error);
-//     }
-
-//     const newNote = {
-//       id: String(notes.length + 1),
-//       title: title,
-//       content: content,
-//       tags: tags,
-//     };
-
-//     notes.push(newNote);
-
-//     res.status(201).json(newNote);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
+router.post("/notes", authUser, createNote);
 
 router.get("/notes", getNotes);
-// router.get("/notes", (req, res, next) => {
-//   try {
-//     res.status(200).json(notes);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
 
 router.delete("/notes/:id", deleteNote);
-// router.delete("/notes/:id", (req, res, next) => {
-//   try {
-//     const noteId = req.params.id;
-
-//     const noteIndex = notes.findIndex((note) => note.id === noteId);
-
-//     if (noteIndex !== -1) {
-//       notes.splice(noteIndex, 1);
-
-//       res.status(200).send(`Note with ID ${noteId} deleted successfully.`);
-//     } else {
-//       const error = new Error("Note not found.");
-//       error.status = 404;
-//       return next(error);
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
-// Route to handle PUT requests to update a note
 
 router.put("/notes/:id", editNote);
-// router.put("/notes/:id", (req, res, next) => {
-//   try {
-//     const noteId = req.params.id;
-//     const { title, content, tags } = req.body;
-
-//     const note = notes.find((n) => n.id === noteId);
-
-//     if (note) {
-//       if (title !== undefined) note.title = title;
-//       if (content !== undefined) note.content = content;
-//       if (tags !== undefined) note.tags = tags;
-
-//       res.status(200).json(note);
-//     } else {
-//       const error = new Error("Note not found.");
-//       error.status = 404;
-//       return next(error);
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// });
 
 export default router;

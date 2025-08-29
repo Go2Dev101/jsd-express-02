@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
 import usersRoutes from "./api/v1/users.js";
 import notesRoutes from "./api/v1/notes.js";
 import { connectMongo } from "./config/mongo.js";
@@ -21,6 +23,7 @@ app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/", usersRoutes);
 app.use("/", notesRoutes);
